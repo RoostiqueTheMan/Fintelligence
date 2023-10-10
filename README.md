@@ -1,2 +1,2 @@
 # Fintelligence
-Bot for counting mounthly budget.
+Bot for counting monthly budget.
