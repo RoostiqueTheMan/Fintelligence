@@ -4,43 +4,25 @@ from datetime import datetime
 class BudgetCounter:
     """Class for monthly budget counting"""
 
-    def __init__(self, income: float, date: str, planned_spending: float = 0):
+    def __init__(self, start_date: str, end_date: str):
         """Initializing method.
 
         Args:
-            income: current budget
-            date: end of accounting period date(day:month:year)
-            planned_spending: planned spending
+            start_date: start of accounting period date(day:month:year)
+            end_date: end of accounting period date(day:month:year)
 
         """
-        self.__income = income
-        self.__date = date
-        self.__planned_spending = planned_spending
-        self.__budget = self.income - self.planned_spending
+        self.__start_date = start_date
+        self.__end_date = end_date
+        self.__budget = 0
 
-    @property
-    def income(self) -> float:
-        """Returns income.
-
-        Returns: float
-        """
-        return self.__income
-
-    @property
-    def date(self) -> datetime:
+    @staticmethod
+    def date_(date_: str) -> datetime:
         """Returns date.
 
         Returns: str
         """
-        return datetime.strptime(self.__date, '%d:%m:%Y')
-
-    @property
-    def planned_spending(self) -> float:
-        """Returns planned spending.
-
-        Returns: float
-        """
-        return self.__planned_spending
+        return datetime.strptime(date_, '%d.%m.%Y')
 
     @property
     def budget(self) -> float:
@@ -50,16 +32,15 @@ class BudgetCounter:
         """
         return self.__budget
 
-    def correct_budget(self, *args) -> float:
+    def correct_budget(self, value: float):
         """Count current budget in view of current expense or income.
 
         Args:
-            args: current expense or income
+            value: current expense or income
 
         Returns: float
         """
-        for arg in args:
-            self.__budget += arg
+        self.__budget += value
 
     @property
     def accounting_period(self) -> int:
@@ -67,7 +48,9 @@ class BudgetCounter:
 
         Returns: int days count
         """
-        return int((str(self.date - datetime.now())).split(' ')[0]) + 1
+        start_date = self.date_(date_=self.__start_date)
+        end_date = self.date_(date_=self.__end_date)
+        return int(str(end_date - start_date).split(' ')[0]) + 1
 
     @property
     def daily_budget(self) -> float:
